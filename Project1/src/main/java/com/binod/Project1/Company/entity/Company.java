@@ -3,8 +3,7 @@ package com.binod.Project1.Company.entity;
 
 import com.binod.Project1.Job.entity.Job;
 import com.binod.Project1.Review.entity.Review;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +17,9 @@ import java.util.List;
 @Getter
 @Setter
 public class Company {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private int id;
     private String name;
     private String description;

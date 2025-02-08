@@ -1,12 +1,13 @@
 package com.binod.Project1.Job.entity;
 
-
 import com.binod.Project1.Company.entity.Company;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.math.BigDecimal;
 
 @Entity
 @Getter
@@ -19,7 +20,7 @@ public class Job {
     int id;
     String empName;
     int age;
-    String salary;
+    BigDecimal salary; // Changed to BigDecimal for better financial representation
     String address;
 
     @Override
@@ -33,8 +34,7 @@ public class Job {
                 '}';
     }
 
-    @OneToMany
+    @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;
-
 }
