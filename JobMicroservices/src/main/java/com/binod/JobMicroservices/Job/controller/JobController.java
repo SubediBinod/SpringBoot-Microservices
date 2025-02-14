@@ -1,5 +1,6 @@
 package com.binod.JobMicroservices.Job.controller;
 
+import com.binod.JobMicroservices.Job.dto.JobCompanyReviewResponseDto;
 import com.binod.JobMicroservices.Job.entity.Job;
 import com.binod.JobMicroservices.Job.service.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +26,8 @@ public class JobController {
     }
 
     @GetMapping("/jobs/{id}")
-    public ResponseEntity<?>getJobs(@PathVariable int id){
-        Job job= service.findJobsById(id);
-        return ResponseEntity.ok().body(job);
-
+    public ResponseEntity<?> getJobById(@PathVariable Integer id) {
+        return service.findJobsById(id); // Now it returns ResponseEntity
     }
     @PostMapping("/jobs")
     public ResponseEntity<?> createJob(@RequestBody Job job){

@@ -22,16 +22,6 @@ public class Job {
     int age;
     BigDecimal salary;
     String address;
+    private int companyId;
 
-
-    @Override
-    public String toString() {
-        return "Job{" +
-                "id=" + id +
-                ", empName='" + empName + '\'' +
-                ", age=" + age +
-                ", salary='" + salary + '\'' +
-                ", address='" + address + '\'' +
-                '}';
-    }
 }
