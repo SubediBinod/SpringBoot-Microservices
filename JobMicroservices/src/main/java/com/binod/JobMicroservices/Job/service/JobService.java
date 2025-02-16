@@ -10,6 +10,7 @@ import com.binod.JobMicroservices.Job.dto.JobCompanyReviewResponseDto;
 import com.binod.JobMicroservices.Job.dto.ReviewDto;
 import com.binod.JobMicroservices.Job.entity.Job;
 import com.binod.JobMicroservices.Job.repo.JobRepo;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,8 @@ public class JobService {
 
 
 
+    @CircuitBreaker(name
+    ="companyBreaker")
     public List<Job> findJobs(){
         return repo.findAll();
     }
@@ -44,6 +47,7 @@ public class JobService {
 
         return ResponseEntity.ok(response);
     }
+    @CircuitBreaker(name = "companyBreaker", fallbackMethod = "fallbackForCompanyReview")
     private JobCompanyReviewResponseDto CallCompanyReviewMicroservices(Job job) {
         // Fetch company details
         CompanyDto companyDto = companyClient.getCompany(job.getCompanyId());
@@ -58,6 +62,17 @@ public class JobService {
         response.setJob(job);
         response.setCompany(companyDto);
         response.setReview(reviewDto);
+
+        return response;
+    }
+    // Fallback method for circuit breaker
+    private JobCompanyReviewResponseDto fallbackForCompanyReview(Job job, Throwable t) {
+        System.out.println("Fallback executed due to: " + t.getMessage());
+
+        JobCompanyReviewResponseDto response = new JobCompanyReviewResponseDto();
+        response.setJob(job);
+        response.setCompany(new CompanyDto()); // Empty company details
+        response.setReview(List.of()); // Empty review list
 
         return response;
     }
