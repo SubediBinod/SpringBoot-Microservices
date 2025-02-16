@@ -11,6 +11,8 @@ import com.binod.JobMicroservices.Job.dto.ReviewDto;
 import com.binod.JobMicroservices.Job.entity.Job;
 import com.binod.JobMicroservices.Job.repo.JobRepo;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -47,7 +49,12 @@ public class JobService {
 
         return ResponseEntity.ok(response);
     }
-    @CircuitBreaker(name = "companyBreaker", fallbackMethod = "fallbackForCompanyReview")
+    //@CircuitBreaker(name = "companyBreaker", fallbackMethod = "fallbackForCompanyReview") this is for circuit breaker and fallback
+
+    //@Retry(name = "companyBreaker", fallbackMethod = "fallbackForCompanyReview") this is for retry, fallback
+
+    @RateLimiter(name = "companyBreaker", fallbackMethod = "fallbackForCompanyReview") //Ratelimiter and fallback
+
     private JobCompanyReviewResponseDto CallCompanyReviewMicroservices(Job job) {
         // Fetch company details
         CompanyDto companyDto = companyClient.getCompany(job.getCompanyId());
